@@ -8,7 +8,7 @@ const validate = require('../middlewares/validate');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.status(200).json({message: "You are in the Auth Endpoint. Register or Login to test Authentication."});
+    res.status(200).json({message: "You are in the Auth Endpoint. Register or Login."});
 });
 
 router.post('/register', [

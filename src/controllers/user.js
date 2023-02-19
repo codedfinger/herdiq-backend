@@ -86,9 +86,11 @@ exports.update = async function (req, res) {
 
         //Attempt to upload to cloudinary
         const result = await uploader(req);
-        const user_ = await User.findByIdAndUpdate(id, {$set: update}, {$set: {profileImage: result.url}}, {new: true});
 
-        if (!req.file) return res.status(200).json({user: user_, message: 'User has been updated'});
+        console.log("========>:", result.url)
+        const user_ = await User.findByIdAndUpdate(id, {$set: update, $set: {profileImage: result.url}}, {new: true});
+
+        if (result.url) return res.status(200).json({user: user_, message: 'User has been updated'});
 
     } catch (error) {
         res.status(500).json({message: error.message});
