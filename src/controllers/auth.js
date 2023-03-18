@@ -108,6 +108,16 @@ async function sendVerificationEmail(user, req, res){
         // Save the verification token
         await token.save();
 
+        let link="http://"+req.headers.host+"/api/auth/verify/"+token.token;
+
+        let mailOptions = {
+            from: process.env.FROM_EMAIL,
+            to: user.email,
+            subject: 'Account Verification Token',
+            html: `<p>Hi ${user.username}<p><br><p>Please click on the following <a href="${link}">link</a> to verify your account.</p> 
+                       <br><p>If you did not request this, please ignore this email.</p>`
+          };
+
         // let subject = "Account Verification Token";
         // let to = user.email;
         // let from = process.env.FROM_EMAIL;
@@ -115,7 +125,7 @@ async function sendVerificationEmail(user, req, res){
         // let html = `<p>Hi ${user.username}<p><br><p>Please click on the following <a href="${link}">link</a> to verify your account.</p> 
         //           <br><p>If you did not request this, please ignore this email.</p>`;
 
-        // await sendEmail({to, from, subject, html});
+        await sendEmail(mailOptions);
 
         res.status(200).json({message: 'A verification email has been sent to ' + user.email + '.'});
     }catch (error) {
