@@ -114,7 +114,7 @@ async function sendVerificationEmail(user, req, res){
             from: process.env.FROM_EMAIL,
             to: user.email,
             subject: 'Account Verification Token',
-            html: `<p>Hi ${user.username}<p><br><p>Please click on the following <a href="${link}">link</a> to verify your account.</p> 
+            html: `<p>Hi ${user.firstName}<p><br><p>Please click on the following <a href="${link}">link</a> to verify your account.</p> 
                        <br><p>If you did not request this, please ignore this email.</p>`
           };
 
