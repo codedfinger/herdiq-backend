@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tare-backend-deployment
+  labels:
+    app: tare-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tare-backend
+  template:
+    metadata:
+      labels:
+        app: tare-backend
+    spec:
+      containers:
+        - name: tare-backend
+          image: codedfingers/tare-backend
+          ports:
+            - containerPort: 5000

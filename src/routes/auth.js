@@ -14,8 +14,8 @@ router.get('/', (req, res) => {
 router.post('/register', [
     check('email').isEmail().withMessage('Enter a valid email address'),
     check('password').not().isEmpty().isLength({min: 6}).withMessage('Must be at least 6 chars long'),
-    check('firstName').not().isEmpty().withMessage('You first name is required'),
-    check('lastName').not().isEmpty().withMessage('You last name is required')
+    //check('firstName').not().isEmpty().withMessage('You first name is required'),
+    check('username').not().isEmpty().withMessage('Please choose a username')
 ], validate, Auth.register);
 
 router.post("/login", [
