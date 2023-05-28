@@ -39,8 +39,8 @@ pipeline {
               --build-arg OAUTH_CLIENTID=$OAUTH_CLIENTID \
               --build-arg OAUTH_CLIENT_SECRET=$OAUTH_CLIENT_SECRET \
               --build-arg OAUTH_REFRESH_TOKEN=$OAUTH_REFRESH_TOKEN \
-
-              -t codedfingers/tare-backend:lastest .
+              -t codedfingers/tare-backend:lastest \
+              .
               
             docker push codedfingers/tare-backend:latest
           '''
