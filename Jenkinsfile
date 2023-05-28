@@ -9,7 +9,7 @@ pipeline {
           def dockerImageTag = 'latest'
 
           // Build the Docker image
-          sh "sudo docker build -t ${dockerImageName}:${dockerImageTag} ."
+          sh "docker build -t ${dockerImageName}:${dockerImageTag} ."
         }
       }
     }
@@ -22,7 +22,7 @@ pipeline {
           def dockerHubUsername = credentials('docker-hub-username')  // Assuming you have Jenkins credentials set for Docker Hub username
 
           // Tag the Docker image
-          sh "sudo docker tag ${dockerImageName}:${dockerImageTag} ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
+          sh "docker tag ${dockerImageName}:${dockerImageTag} ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
         }
       }
     }
@@ -35,10 +35,10 @@ pipeline {
           def dockerHubCredentials = credentials('docker-login')  // Replace 'docker-login' with the correct credentials ID
 
           // Authenticate with Docker Hub
-          sh "sudo docker login -u ${dockerHubCredentials.username} -p ${dockerHubCredentials.password}"
+          sh "docker login -u ${dockerHubCredentials.username} -p ${dockerHubCredentials.password}"
 
           // Push the Docker image to Docker Hub
-          sh "sudo docker push ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
+          sh "docker push ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
         }
       }
     }
