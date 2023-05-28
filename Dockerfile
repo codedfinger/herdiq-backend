@@ -13,8 +13,6 @@ RUN npm install
 # Copy the app source code to the container
 COPY . .
 
-# Copy the .env file to the container
-COPY .env .
 
 # Runtime stage
 FROM node:14-alpine
