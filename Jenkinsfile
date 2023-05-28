@@ -9,7 +9,7 @@ pipeline {
           def dockerImageTag = 'latest'
 
           // Build the Docker image
-          sh "docker build -t ${dockerImageName}:${dockerImageTag} ."
+          sh "sudo docker build -t ${dockerImageName}:${dockerImageTag} ."
         }
       }
     }
@@ -19,27 +19,26 @@ pipeline {
         script {
           def dockerImageName = 'tare-backend'
           def dockerImageTag = 'latest'
-          def dockerHubUsername = credentials('docker-login')  // Assuming you have Jenkins credentials set for Docker Hub username
+          def dockerHubUsername = credentials('docker-hub-username')  // Assuming you have Jenkins credentials set for Docker Hub username
 
           // Tag the Docker image
-          sh "docker tag ${dockerImageName}:${dockerImageTag} ${dockerHubUsername}/${dockerImageName}:${dockerImageTag}"
+          sh "sudo docker tag ${dockerImageName}:${dockerImageTag} ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
         }
       }
     }
 
-    stage('Push') {
+     stage('Push') {
       steps {
         script {
-          def dockerImageName = 'tare-backends'
+          def dockerImageName = 'tare-backend'
           def dockerImageTag = 'latest'
-          def dockerHubUsername = credentials('docker-hub-username')  // Assuming you have Jenkins credentials set for Docker Hub username
-          def dockerHubPassword = credentials('docker-hub-password')  // Assuming you have Jenkins credentials set for Docker Hub password
+          def dockerHubCredentials = credentials('docker-login')  // Replace 'docker-login' with the correct credentials ID
 
           // Authenticate with Docker Hub
-          sh "docker login -u ${dockerHubUsername} -p ${dockerHubPassword}"
+          sh "sudo docker login -u ${dockerHubCredentials.username} -p ${dockerHubCredentials.password}"
 
           // Push the Docker image to Docker Hub
-          sh "docker push ${dockerHubUsername}/${dockerImageName}:${dockerImageTag}"
+          sh "sudo docker push ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
         }
       }
     }
