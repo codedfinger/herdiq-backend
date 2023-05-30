@@ -51,10 +51,9 @@ pipeline {
         script {
           def dockerImageName = 'tare-backend'
           def dockerImageTag = 'v1.0'
-          def dockerHubCredentials = credentials('docker-login') 
 
           // Tag the Docker image
-          sh "docker tag ${dockerImageName}:${dockerImageTag} ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
+          sh "docker tag ${dockerImageName}:${dockerImageTag} codedfingers/${dockerImageName}:${dockerImageTag}"
         }
       }
     }
