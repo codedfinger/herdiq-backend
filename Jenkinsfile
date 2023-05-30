@@ -50,7 +50,7 @@ pipeline {
       steps {
         script {
           // Tag the Docker image
-          sh "docker tag tare-backend:latest codedfingers/tare-backend:latest"
+          sh "docker tag codedfingers/tare-backend:latest tare-backend:latest"
         }
       }
     }
