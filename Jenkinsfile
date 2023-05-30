@@ -63,17 +63,9 @@ pipeline {
 
      stage('Push') {
       steps {
-        script {
-          def dockerImageName = 'tare-backend'
-          def dockerImageTag = 'v1.0'
-          def dockerHubCredentials = credentials('docker-login')  // Replace 'docker-login' with the correct credentials ID
-
-          // Authenticate with Docker Hub
-          sh "docker login -u ${dockerHubCredentials.username} -p ${dockerHubCredentials.password}"
-
-          // Push the Docker image to Docker Hub
-          sh "docker push ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
-        }
+         withDockerRegistry([credentialsId: "docker-login", url: "https://index.docker.io/v1/"]) {
+              sh "docker push tare-backend:v1.0"
+          }
       }
     }
   }
