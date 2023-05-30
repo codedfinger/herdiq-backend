@@ -77,21 +77,18 @@ pipeline {
           string(credentialsId: 'OAUTH_CLIENTID', variable: 'OAUTH_CLIENTID'),
           string(credentialsId: 'OAUTH_CLIENT_SECRET', variable: 'OAUTH_CLIENT_SECRET'),
           string(credentialsId: 'OAUTH_REFRESH_TOKEN', variable: 'OAUTH_REFRESH_TOKEN')
-
-
         ]){
-          sh "docker run -d --name tare-backend-container -p 5000:5000 \\
-          -e JWT_SECRET=$JWT_SECRET \\
-          -e MONGO_LOCAL_CONN_URL=$MONGO_LOCAL_CONN_URL \\
-          -e MONGO_LOCAL_CONN_URL_PROD=$MONGO_LOCAL_CONN_URL_PROD \\
-          -e MAIL_USERNAME=$MAIL_USERNAME \\
-          -e MAIL_PASSWORD=$MAIL_PASSWORD \\
-          -e OAUTH_CLIENTID=$OAUTH_CLIENTID \\
-          -e OAUTH_CLIENT_SECRET=$OAUTH_CLIENT_SECRET \\
-          -e OAUTH_REFRESH_TOKEN=$OAUTH_REFRESH_TOKEN \\
-          codedfingers/tare-backend:latest"
+          sh """docker run -d --name tare-backend-container -p 5000:5000 \\
+            -e JWT_SECRET=$JWT_SECRET \\
+            -e MONGO_LOCAL_CONN_URL=$MONGO_LOCAL_CONN_URL \\
+            -e MONGO_LOCAL_CONN_URL_PROD=$MONGO_LOCAL_CONN_URL_PROD \\
+            -e MAIL_USERNAME=$MAIL_USERNAME \\
+            -e MAIL_PASSWORD=$MAIL_PASSWORD \\
+            -e OAUTH_CLIENTID=$OAUTH_CLIENTID \\
+            -e OAUTH_CLIENT_SECRET=$OAUTH_CLIENT_SECRET \\
+            -e OAUTH_REFRESH_TOKEN=$OAUTH_REFRESH_TOKEN \\
+            codedfingers/tare-backend:latest"""
         }
-        
       }
     }
   }
