@@ -63,7 +63,7 @@ pipeline {
 
      stage('Push') {
       steps {
-         withDockerRegistry([credentialsId: "docker-login"]) {
+         withDockerRegistry([credentialsId: "docker-login", url: "https://index.docker.io/v1/" ]) {
             docker.image('codedfingers/tare-backend:v1.0').push()
           }
       }
