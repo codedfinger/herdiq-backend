@@ -39,7 +39,7 @@ pipeline {
               --build-arg OAUTH_CLIENTID=$OAUTH_CLIENTID \
               --build-arg OAUTH_CLIENT_SECRET=$OAUTH_CLIENT_SECRET \
               --build-arg OAUTH_REFRESH_TOKEN=$OAUTH_REFRESH_TOKEN \
-              --no-cache -t codedfingers/tare-backend:v1.0 \
+              --no-cache -t codedfingers/tare-backend:latest \
               .
           '''
         }
@@ -49,11 +49,8 @@ pipeline {
     stage('Tag') {
       steps {
         script {
-          def dockerImageName = 'tare-backend'
-          def dockerImageTag = 'v1.0'
-
           // Tag the Docker image
-          sh "docker tag ${dockerImageName}:${dockerImageTag} codedfingers/${dockerImageName}:${dockerImageTag}"
+          sh "docker tag tare-backend:latest codedfingers/tare-backend:latest"
         }
       }
     }
