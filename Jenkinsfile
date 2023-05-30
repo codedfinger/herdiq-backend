@@ -56,7 +56,7 @@ pipeline {
           def dockerHubCredentials = credentials('docker-login')  // Replace 'docker-login' with the correct credentials ID
 
           // Tag the Docker image
-          sh "docker tag ${dockerImageName}:${dockerImageTag} ${dockerHubCredentials.username}/${dockerImageName}:${dockerImageTag}"
+          sh "docker tag tare-backend:v1.0 codedfingers/tare-backend:v1.0"
         }
       }
     }
@@ -64,7 +64,7 @@ pipeline {
      stage('Push') {
       steps {
          withDockerRegistry([credentialsId: "docker-login"]) {
-              sh "docker push codedfingers/tare-backend:v1.0"
+            docker.image('codedfingers/tare-backend:v1.0').push()
           }
       }
     }
