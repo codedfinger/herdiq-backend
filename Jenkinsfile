@@ -65,7 +65,7 @@ pipeline {
       steps {
         script {
           def dockerImageName = 'tare-backend'
-          def dockerImageTag = 'latest'
+          def dockerImageTag = 'v1.0'
           def dockerHubCredentials = credentials('docker-login')  // Replace 'docker-login' with the correct credentials ID
 
           // Authenticate with Docker Hub
