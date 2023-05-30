@@ -63,5 +63,16 @@ pipeline {
         }
       }
     }
+
+    stage('Run') {
+      steps {
+        // Stop and remove any existing containers
+        sh "docker stop tare-backend-container || true"
+        sh "docker rm tare-backend-container || true"
+
+        // Run the Docker image as a container
+        sh "docker run -d --name tare-backend-container -p 5000:5000 codedfingers/tare-backend:latest"
+      }
+    }
   }
 }
