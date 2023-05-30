@@ -41,8 +41,6 @@ pipeline {
               --build-arg OAUTH_REFRESH_TOKEN=$OAUTH_REFRESH_TOKEN \
               --no-cache -t codedfingers/tare-backend:v1.0 \
               .
-              
-            docker push codedfingers/tare-backend:v1.0
           '''
         }
       }
