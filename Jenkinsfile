@@ -61,10 +61,9 @@ pipeline {
 
      stage('Push') {
       steps {
-        script {
-          withRegistry(credentialsId: 'docker-login', url="") {
-            sh "docker push codedfingers/tare-backend:v1.0"
-          }
+      	withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+        	sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          sh "docker push codedfingers/tare-backend:v1.0"
         }
       }
     }
