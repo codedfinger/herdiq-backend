@@ -11,10 +11,7 @@ pipeline {
     }
 
     stage('Build') {
-      steps {
-        // Checkout your repository from GitHub
-        checkout scm
-        
+      steps {      
         // Load environment variables
         withCredentials([
           string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET'),
@@ -84,15 +81,15 @@ pipeline {
 
         ]){
           sh "docker run -d --name tare-backend-container -p 5000:5000 \\
-        -e JWT_SECRET=$JWT_SECRET \\
-        -e MONGO_LOCAL_CONN_URL=$MONGO_LOCAL_CONN_URL \\
-        -e MONGO_LOCAL_CONN_URL_PROD=$MONGO_LOCAL_CONN_URL_PROD \\
-        -e MAIL_USERNAME=$MAIL_USERNAME \\
-        -e MAIL_PASSWORD=$MAIL_PASSWORD \\
-        -e OAUTH_CLIENTID=$OAUTH_CLIENTID \\
-        -e OAUTH_CLIENT_SECRET=$OAUTH_CLIENT_SECRET \\
-        -e OAUTH_REFRESH_TOKEN=$OAUTH_REFRESH_TOKEN \\
-        codedfingers/tare-backend:latest"
+          -e JWT_SECRET=$JWT_SECRET \\
+          -e MONGO_LOCAL_CONN_URL=$MONGO_LOCAL_CONN_URL \\
+          -e MONGO_LOCAL_CONN_URL_PROD=$MONGO_LOCAL_CONN_URL_PROD \\
+          -e MAIL_USERNAME=$MAIL_USERNAME \\
+          -e MAIL_PASSWORD=$MAIL_PASSWORD \\
+          -e OAUTH_CLIENTID=$OAUTH_CLIENTID \\
+          -e OAUTH_CLIENT_SECRET=$OAUTH_CLIENT_SECRET \\
+          -e OAUTH_REFRESH_TOKEN=$OAUTH_REFRESH_TOKEN \\
+          codedfingers/tare-backend:latest"
         }
         
       }
