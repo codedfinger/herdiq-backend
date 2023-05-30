@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
-const TeamSchema = new mongoose.Schema({
+const ShopSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -10,10 +10,10 @@ const TeamSchema = new mongoose.Schema({
 
     name: {
         type: String,
-        required: 'Team name is required',
+        required: 'Shop name is required',
     },
 
-    location: {
+    type: {
         type: String,
         required: true
     },    
@@ -32,6 +32,6 @@ const TeamSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 
-TeamSchema.plugin(aggregatePaginate);
+ShopSchema.plugin(aggregatePaginate);
 
-module.exports = mongoose.model('Teams', TeamSchema);
+module.exports = mongoose.model('Shops', ShopSchema);

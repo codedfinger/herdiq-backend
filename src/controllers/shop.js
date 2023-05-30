@@ -3,7 +3,7 @@ const faker = require('faker'); //For testing purpose only
 const moment = require('moment');
 
 const User = require('../models/user');
-const Team = require('../models/teams');
+const Shop = require('../models/shop');
 const {uploader} = require('../utils/index');
 
 const limit_ = 5;
@@ -24,7 +24,7 @@ exports.index = async function (req, res) {
         collation: {locale: 'en'},
         customLabels: {
             totalDocs: 'totalResults',
-            docs: 'teams'
+            docs: 'shops'
         }
     };
 
@@ -62,8 +62,8 @@ exports.index = async function (req, res) {
     // aggregate_options.push({$lookup: {from: 'interested', localField: "_id", foreignField: "eventId", as: "interested"}});
 
     // Set up the aggregation
-    const myAggregate = Team.aggregate(aggregate_options);
-    const result = await Team.aggregatePaginate(myAggregate, options);
+    const myAggregate = Shop.aggregate(aggregate_options);
+    const result = await Shop.aggregatePaginate(myAggregate, options);
     res.status(200).json(result);
 };
 
@@ -74,18 +74,20 @@ exports.index = async function (req, res) {
 exports.store = async (req, res) => {
     try {
         const userId = req.user._id;
-        const newTeam = new Team({...req.body, userId});
+        console.log("user", userId)
 
-        const team = await newTeam.save();
+        const newShop = new Shop({...req.body, userId});
+
+        const shop = await newShop.save();
 
         //if there is no image, return success message
-        if (!req.file) return res.status(200).json({team, message: 'Team added successfully'});
+       if (!req.file) return res.status(200).json({shop, message: 'Shop added successfully'});
 
         //Attempt to upload to cloudinary
-        const result = await uploader(req);
-        const team_ = await Team.findByIdAndUpdate(team._id, {$set: {image: result.url}}, {new: true});
+        //const result = await uploader(req);
+        //const shop_ = await Shop.findByIdAndUpdate(shop._id, {$set: {image: result.url}}, {new: true});
 
-        res.status(200).json({team: team_, message: 'Team added successfully'});
+        // res.status(200).json({shop: shop_, message: 'Shop added successfully'});
     } catch (error) {
         res.status(500).json({message: error.message});
     }
@@ -98,11 +100,11 @@ exports.show = async function (req, res) {
     try {
         const id = req.params.id;
 
-        const team = await Team.findById(id);
+        const shop = await Shop.findById(id);
 
-        if (!team) return res.status(401).json({message: 'Team does not exist'});
+        if (!shop) return res.status(401).json({message: 'Shop does not exist'});
 
-        res.status(200).json({team});
+        res.status(200).json({shop});
     } catch (error) {
         res.status(500).json({message: error.message})
     }
@@ -117,18 +119,18 @@ exports.update = async function (req, res) {
         const id = req.params.id;
         const userId = req.user._id;
 
-        const team = await Team.findOneAndUpdate({_id: id, userId}, {$set: update}, {new: true});
+        const shop = await Shop.findOneAndUpdate({_id: id, userId}, {$set: update}, {new: true});
 
-        if (!team) return res.status(401).json({message: 'Team does not exist'});
+        if (!shop) return res.status(401).json({message: 'Shop does not exist'});
 
         //if there is no image, return success message
-        if (!req.file) return res.status(200).json({team, message: 'Team has been updated'});
+        if (!req.file) return res.status(200).json({shop, message: 'Shop has been updated'});
 
         //Attempt to upload to cloudinary
         const result = await uploader(req);
-        const team_ = await Team.findOneAndUpdate({_id: id, userId}, {$set: {image: result.url}}, {new: true});
+        const shop_ = await Shop.findOneAndUpdate({_id: id, userId}, {$set: {image: result.url}}, {new: true});
 
-        res.status(200).json({team: team_, message: 'Team has been updated'});
+        res.status(200).json({shop: shop_, message: 'Shop has been updated'});
     } catch (error) {
         res.status(500).json({message: error.message});
     }
@@ -142,11 +144,11 @@ exports.destroy = async function (req, res) {
         const id = req.params.id;
         const userId = req.user._id;
 
-        const team = await Team.findOneAndDelete({_id: id, userId});
+        const shop = await Shop.findOneAndDelete({_id: id, userId});
 
-        if (!team) return res.status(401).json({message: "Team does not exist or you don't have the required permission."});
+        if (!shop) return res.status(401).json({message: "Shop does not exist or you don't have the required permission."});
 
-        res.status(200).json({message: 'Team has been removed'});
+        res.status(200).json({message: 'Shop has been removed'});
     } catch (error) {
         res.status(500).json({message: error.message});
     }
@@ -160,7 +162,7 @@ exports.seed = async function (req, res) {
 
     try {
         let ids = [];
-        let teams = [];
+        let shops = [];
 
         for (let i = 0; i < 5; i++) {
             const password = '_' + Math.random().toString(36).substr(2, 9); //generate a random password
@@ -180,7 +182,7 @@ exports.seed = async function (req, res) {
         for (let i = 0; i < ids.length; i++) {
             //Create 5 events for each user
             for (let j = 0; j < 5; j++) {
-                const newTeam = new Team({
+                const newShop = new Shop({
                     name: faker.lorem.word(),
                     location: faker.address.streetName(),
                     description: faker.lorem.text(),
@@ -188,12 +190,12 @@ exports.seed = async function (req, res) {
                     userId: ids[i]
                 });
 
-                let team = await newTeam.save();
-                teams.push(team);
+                let shop = await newShop.save();
+                shops.push(shop);
             }
         }
 
-        res.status(200).json({ids, teams, message: 'Database seeded!'});
+        res.status(200).json({ids, shops, message: 'Database seeded!'});
     } catch (error) {
         res.status(500).json({message: error.message});
     }
