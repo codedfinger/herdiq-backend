@@ -64,7 +64,7 @@ pipeline {
      stage('Push') {
       steps {
          withDockerRegistry([credentialsId: "docker-login", url: "https://index.docker.io/v1/"]) {
-              sh "docker push codedfingers/tare-backend:v1.0"
+              sh "sudo docker push codedfingers/tare-backend:v1.0"
           }
       }
     }
