@@ -1,29 +1,72 @@
 const User = require('../models/user');
 const Token = require('../models/token');
 const {sendEmail} = require('../utils/index');
+const bcrypt = require('bcryptjs');
 
 // @route POST api/auth/register
 // @desc Register user
 // @access Public
 exports.register = async (req, res) => {
     try {
-        const { email } = req.body;
+        const { email, password, username } = req.body;
 
-        // Make sure this account doesn't already exist
+        // Check if email is already registered
         const user = await User.findOne({ email });
 
-        if (user) return res.status(401).json({message: 'The email address you have entered is already associated with another account.'});
+        if (user) {
+            return res.status(401).json({
+                success: false,
+                status: 401,
+                error: {
+                    message: 'The email address is already associated with another account.'
+                }
+            });
+        }
 
-        const newUser = new User({ ...req.body, role: "basic" });
+        // Validate and hash the password
+        if (!password || password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                status: 400,
+                error: {
+                    message: 'Password should be at least 6 characters long.'
+                }
+            });
+        }
 
-        const user_ = await newUser.save();
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        await sendVerificationEmail(user_, req, res);
+        // Create a new user with the hashed password
+        const newUser = new User({ email, password: hashedPassword, username, role: "basic" });
+
+        // Save the new user to the database
+        const savedUser = await newUser.save();
+
+        // You can now send a verification email if needed
+        // await sendVerificationEmail(savedUser, req, res);
+
+        res.status(200).json({
+            success: true,
+            status: 200,
+            data: {
+                message: 'Registration successful',
+                savedUser
+            }
+        });
 
     } catch (error) {
-        res.status(500).json({success: false, message: error.message})
+        res.status(500).json({
+            success: false,
+            status: 500,
+            error: {
+                message: 'Internal server error',
+                reference_code: 'ERR-500-INTERNAL'
+            }
+        });
     }
 };
+
+
 
 // @route POST api/auth/login
 // @desc Login user and return JWT token
@@ -34,18 +77,54 @@ exports.login = async (req, res) => {
 
         const user = await User.findOne({ email });
 
-        if (!user) return res.status(401).json({msg: 'The email address ' + email + ' is not associated with any account. Double-check your email address and try again.'});
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                status: 401,
+                error: {
+                    message: 'The email address ' + email + ' is not associated with any account. Double-check your email address and try again.'
+                }
+            });
+        }
 
-        //validate password
-        if (!user.comparePassword(password)) return res.status(401).json({message: 'Invalid email or password'});
+        const passwordsMatch = bcrypt.compare(password, user.password);
+
+        console.log("password match", passwordsMatch)
+
+        if (!passwordsMatch) {
+            return res.status(401).json({
+                success: false,
+                status: 401,
+                error: {
+                    message: 'Invalid email or password'
+                }
+            });
+        }
 
         // Make sure the user has been verified
-        if (!user.isVerified) return res.status(401).json({ type: 'not-verified', message: 'Your account has not been verified.' });
+        if (!user.isVerified) {
+            return res.status(401).json({ 
+                success: false,
+                status: 401,
+                type: 'not-verified', 
+                error:{
+                    message: 'Your account has not been verified.' 
+                }
+            });
+        }
 
         // Login successful, write token, and send back user
-        res.status(200).json({token: user.generateJWT(), user: user});
+        res.status(200).json({
+            success: true,
+            status: 200,
+            data: {
+                token: user.generateJWT(), 
+                user: user,  
+                message: 'Login successful'
+            }
+        });
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({ message: error.message });
     }
 };
 
