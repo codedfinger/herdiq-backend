@@ -2,10 +2,9 @@ const mongoose = require('mongoose');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const BreedSchema = new mongoose.Schema({
-    breedID: {
-        type: mongoose.Schema.Types.ObjectId,
+    userID: {
+        type: String,
         required: true,
-        ref: 'User'
     },
 
     animalType: {

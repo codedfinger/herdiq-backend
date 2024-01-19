@@ -2,17 +2,21 @@ const mongoose = require('mongoose');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const AnimalSchema = new mongoose.Schema({
-    animalID: {
-        type: mongoose.Schema.Types.ObjectId,
+    tagID: {
+        type: String,
         required: true,
-        ref: 'User'
+    },
+
+    userID: {
+        type: String,
+        required: true,
     },
 
     animalType: {
         type: String,
     },
 
-    breed: {
+    breedName: {
         type: String,
         required: true
     }, 
@@ -34,7 +38,6 @@ const AnimalSchema = new mongoose.Schema({
     }, 
     shed: {
         type: String,
-        required: true
     },    
 
 }, {timestamps: true});
@@ -42,4 +45,4 @@ const AnimalSchema = new mongoose.Schema({
 
 AnimalSchema.plugin(aggregatePaginate);
 
-module.exports = mongoose.model('Breeds', AnimalSchema);
+module.exports = mongoose.model('Animals', AnimalSchema);

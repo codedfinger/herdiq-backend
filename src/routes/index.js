@@ -1,7 +1,9 @@
 const auth = require('./auth');
 const user = require('./user');
 const breed = require('./breed');
- 
+const animal = require('./animal');
+const shed = require('./shed');
+
 const authenticate = require('../middlewares/authenticate');
 
 module.exports = app => {
@@ -12,5 +14,9 @@ module.exports = app => {
     app.use('/api/auth', auth);
     app.use('/api/user', authenticate, user);
     app.use('/api/breed', breed);
+    app.use('/api/animal', animal);
+    app.use('/api/shed', shed);
+
+
 
 };  
