@@ -27,17 +27,17 @@ const UserSchema = new mongoose.Schema({
         max: 100
     },
 
-    firstName: {
+    fullname: {
         type: String,
-        //required: 'First Name is required',
+        required: 'Full Name is required',
         max: 100
     },
 
-    lastName: {
-        type: String,
-        //required: 'Last Name is required',
-        max: 100
-    },
+    // lastName: {
+    //     type: String,
+    //     //required: 'Last Name is required',
+    //     max: 100
+    // },
 
     bio: {
         type: String,

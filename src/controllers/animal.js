@@ -30,6 +30,12 @@ exports.addAnimal = async (req, res) => {
             shed, 
         } = req.body;
 
+        // Check if tagID already exists
+        const existingAnimal = await Animal.findOne({ tagID });
+        if (existingAnimal) {
+            throw new Error('Animal with the provided tagID already exists');
+        }
+
         const newAnimal = new Animal({ 
             tagID,
             animalType, 
@@ -103,7 +109,16 @@ exports.getGoatAnimals = async function (req, res) {
         const animals = await Animal.find({ userID: id, animalType: 'goat' });
 
         if (!animals || animals.length === 0) {
-            return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No breeds found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
         }
 
         res.status(200).json({ animals });

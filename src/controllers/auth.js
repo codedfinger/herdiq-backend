@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 // @access Public
 exports.register = async (req, res) => {
     try {
-        const { email, password, username } = req.body;
+        const { email, password, username, fullname } = req.body;
 
         // Check if email is already registered
         const user = await User.findOne({ email });
@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create a new user with the hashed password
-        const newUser = new User({ email, password: hashedPassword, username, role: "basic" });
+        const newUser = new User({ email, password: hashedPassword, username, role: "basic", fullname });
 
         // Save the new user to the database
         const savedUser = await newUser.save();

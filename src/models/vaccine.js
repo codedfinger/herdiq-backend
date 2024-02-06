@@ -1,8 +1,39 @@
 const mongoose = require('mongoose');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
-const BreedSchema = new mongoose.Schema({
-    vaccineID: {
+const animalSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    tagID: {
+        type: String,
+        required: true,
+    },
+    gender: {
+        type: String,
+        required: true
+    },
+    firstDay: {
+        type: Date,
+        required: true
+    },
+    cycle: {
+        type: Number,
+        required: true
+    },
+    lastDay:{
+        type: Date,
+        required: true
+    },
+    remark: {
+        type: String,
+        required: true
+    }
+});
+
+const VaccineSchema = new mongoose.Schema({
+    userID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
@@ -10,21 +41,26 @@ const BreedSchema = new mongoose.Schema({
 
     vaccineName: {
         type: String,
-        required: 'Pls Choose animal type',
+        required: true,
     },
 
     cycle: {
-        type: String,
+        type: Number,
         required: true
     }, 
+
     remark: {
         type: String,
         required: true
-    },   
+    },
+    vaccineAnimals: {
+        type: [animalSchema],
+        required: true
+    }   
 
 }, {timestamps: true});
 
 
-BreedSchema.plugin(aggregatePaginate);
+VaccineSchema.plugin(aggregatePaginate);
 
-module.exports = mongoose.model('Breeds', BreedSchema);
+module.exports = mongoose.model('Vaccines', VaccineSchema);

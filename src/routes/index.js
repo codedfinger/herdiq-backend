@@ -3,6 +3,8 @@ const user = require('./user');
 const breed = require('./breed');
 const animal = require('./animal');
 const shed = require('./shed');
+const vaccine = require('./vaccine')
+const progeny = require('./progeny')
 
 const authenticate = require('../middlewares/authenticate');
 
@@ -16,6 +18,9 @@ module.exports = app => {
     app.use('/api/breed', breed);
     app.use('/api/animal', animal);
     app.use('/api/shed', shed);
+    app.use('/api/vaccine', vaccine);
+    app.use('/api/progeny', progeny);
+
 
 
 

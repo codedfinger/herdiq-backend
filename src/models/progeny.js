@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
-const AnimalSchema = new mongoose.Schema({
+const ProgenySchema = new mongoose.Schema({
     tagID: {
         type: String,
         required: true,
     },
-
-    userID: {
+    parentTagID: {
+        type: String,
+        required: true
+    },
+    userID: { 
         type: String,
         required: true,
     },
@@ -41,17 +44,11 @@ const AnimalSchema = new mongoose.Schema({
     },
     vaccine: {
         type: Array,
-    },
-    progenyOf: {
-        type: String
-    },
-    progeny: {
-        type: Array
     }    
 
 }, {timestamps: true});
 
 
-AnimalSchema.plugin(aggregatePaginate);
+ProgenySchema.plugin(aggregatePaginate);
 
-module.exports = mongoose.model('Animals', AnimalSchema);
+module.exports = mongoose.model('progenies', ProgenySchema);
