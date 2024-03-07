@@ -33,13 +33,25 @@ const UserSchema = new mongoose.Schema({
         max: 100
     },
 
-    // lastName: {
-    //     type: String,
-    //     //required: 'Last Name is required',
-    //     max: 100
-    // },
+    farmName: {
+        type: String,
+        required: false,
+        max: 255
+    },
 
-    bio: {
+    country: {
+        type: String,
+        required: false,
+        max: 255
+    },
+
+    mobileNumber: {
+        type: String,
+        required: false,
+        max: 255
+    },
+
+    city: {
         type: String,
         required: false,
         max: 255

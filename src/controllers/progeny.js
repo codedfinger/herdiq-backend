@@ -29,7 +29,6 @@ exports.addProgeny = async (req, res) => {
             gender,
             color,
             batchNo,
-            purchaseType,
             shed, 
         } = req.body;
 
@@ -54,7 +53,6 @@ exports.addProgeny = async (req, res) => {
             gender,
             color,
             batchNo,
-            purchaseType,
             shed,  
             userID
         });
@@ -75,7 +73,6 @@ exports.addProgeny = async (req, res) => {
             gender,
             color,
             batchNo,
-            purchaseType,
             shed,
             userID,
             progenyOf: parentTagID // Adding reference to the parent
@@ -96,7 +93,7 @@ exports.addProgeny = async (req, res) => {
         }
 
         // Add progeny to parent animal's progeny field
-        parentAnimal.progeny.push(savedProgenyAnimal._id);
+        parentAnimal.progeny.push(savedProgenyAnimal.tagID);
         await parentAnimal.save();
 
         return res.status(200).json({
@@ -142,11 +139,123 @@ exports.getProgeny = async function (req, res) {
 // @route GET api/breed/{id}
 // @desc Returns all goat breeds
 // @access Public
-exports.getGoatPProgeny = async function (req, res) {
+exports.getGoatProgeny = async function (req, res) {
     try {
         const id = req.params.id; // Assuming the user ID is passed in the request parameters
 
         const progeny = await Progeny.find({ userID: id, animalType: 'goat' });
+
+        if (!progeny || progeny.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No progeny found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ progeny });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all cow progeny
+// @access Public
+exports.getCowProgeny = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const progeny = await Progeny.find({ userID: id, animalType: 'cow' });
+
+        if (!progeny || progeny.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No progeny found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ progeny });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all sheep progeny
+// @access Public
+exports.getSheepProgeny = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const progeny = await Progeny.find({ userID: id, animalType: 'sheep' });
+
+        if (!progeny || progeny.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No progeny found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ progeny });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all pig progeny
+// @access Public
+exports.getPigProgeny = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const progeny = await Progeny.find({ userID: id, animalType: 'pig' });
+
+        if (!progeny || progeny.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No progeny found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ progeny });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all rabbit progeny
+// @access Public
+exports.getRabbitProgeny = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const progeny = await Progeny.find({ userID: id, animalType: 'rabbit' });
 
         if (!progeny || progeny.length === 0) {
             // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });

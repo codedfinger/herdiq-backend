@@ -94,6 +94,83 @@ exports.getGoatBreeds = async function (req, res) {
     }
 };
 
+// @route GET api/breed/{id}
+// @desc Returns all cow breeds
+// @access Public
+exports.getCowBreeds = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const breeds = await Breed.find({ userID: id, animalType: 'cow' });
+
+        if (!breeds || breeds.length === 0) {
+            return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+        }
+
+        res.status(200).json({ breeds });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all sheep breeds
+// @access Public
+exports.getSheepBreeds = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const breeds = await Breed.find({ userID: id, animalType: 'sheep' });
+
+        if (!breeds || breeds.length === 0) {
+            return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+        }
+
+        res.status(200).json({ breeds });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all pig breeds
+// @access Public
+exports.getPigBreeds = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const breeds = await Breed.find({ userID: id, animalType: 'pig' });
+
+        if (!breeds || breeds.length === 0) {
+            return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+        }
+
+        res.status(200).json({ breeds });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all rabbit breeds
+// @access Public
+exports.getRabbitBreeds = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const breeds = await Breed.find({ userID: id, animalType: 'rabbit' });
+
+        if (!breeds || breeds.length === 0) {
+            return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+        }
+
+        res.status(200).json({ breeds });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 
 // @route GET api/breed/{id}
 // @desc Returns a specific breed

@@ -4,6 +4,7 @@ const {check} = require('express-validator');
 const Auth = require('../controllers/auth');
 const Password = require('../controllers/password');
 const validate = require('../middlewares/validate');
+const authenticateMiddleware = require('../middlewares/authenticate');
 
 const router = express.Router();
 
@@ -39,6 +40,12 @@ router.post('/reset/:token', [
     check('password').not().isEmpty().isLength({min: 6}).withMessage('Must be at least 6 chars long'),
     check('confirmPassword', 'Passwords do not match').custom((value, {req}) => (value === req.body.password)),
 ], validate, Password.resetPassword);
+
+//GET USER
+router.get('/show/:id', authenticateMiddleware, Auth.show);
+router.put('/update/:id', authenticateMiddleware, Auth.update);
+router.put('/password/:id', authenticateMiddleware, Auth.changePassword);
+
 
 
 module.exports = router;

@@ -99,6 +99,26 @@ exports.getAnimal = async function (req, res) {
     }
 };
 
+// @route GET api/event/{id}
+// @desc Returns a specific event
+// @access Public
+exports.getAnimalByTag = async function (req, res) {
+    try {
+        const tagID = req.params.tagID;
+
+        console.log('Received ID:', tagID);
+
+
+        const animal = await Animal.findOne({tagID});
+
+        if (!animal) return res.status(401).json({message: 'Animal does not exist'});
+
+        res.status(200).json({animal});
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+};
+
 // @route GET api/breed/{id}
 // @desc Returns all goat breeds
 // @access Public
@@ -107,6 +127,118 @@ exports.getGoatAnimals = async function (req, res) {
         const id = req.params.id; // Assuming the user ID is passed in the request parameters
 
         const animals = await Animal.find({ userID: id, animalType: 'goat' });
+
+        if (!animals || animals.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No breeds found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ animals });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all cow breeds
+// @access Public
+exports.getCowAnimals = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const animals = await Animal.find({ userID: id, animalType: 'cow' });
+
+        if (!animals || animals.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No breeds found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ animals });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all pig breeds
+// @access Public
+exports.getPigAnimals = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const animals = await Animal.find({ userID: id, animalType: 'pig' });
+
+        if (!animals || animals.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No breeds found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ animals });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all sheep breeds
+// @access Public
+exports.getSheepAnimals = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const animals = await Animal.find({ userID: id, animalType: 'sheep' });
+
+        if (!animals || animals.length === 0) {
+            // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                data: {
+                    message: `No breeds found for user with ID ${id}`,
+                    reference_code: 'ERR-500-INTERNAL'
+
+                }
+            });
+        }
+
+        res.status(200).json({ animals });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @route GET api/breed/{id}
+// @desc Returns all rabbit breeds
+// @access Public
+exports.getRabbitAnimals = async function (req, res) {
+    try {
+        const id = req.params.id; // Assuming the user ID is passed in the request parameters
+
+        const animals = await Animal.find({ userID: id, animalType: 'rabbit' });
 
         if (!animals || animals.length === 0) {
             // return res.status(404).json({ message: `No breeds found for user with ID ${id}` });
@@ -172,3 +304,35 @@ exports.deleteAnimal = async function (req, res) {
 };
 
 
+// @route GET api/animal/user/:userID
+// @desc Returns all animals belonging to a user and their counts
+// @access Public
+exports.getAllAnimalsByUser = async function (req, res) {
+    try {
+        const userID = req.params.userID;
+
+        // Assuming Animal model represents your animal collection in the database
+        const animals = await Animal.find({ userID });
+
+        if (!animals || animals.length === 0) {
+            return res.status(404).json({ message: 'No animals found for this user' });
+        }
+
+        // Group animals by animalType and count them
+        const animalCounts = {};
+        animals.forEach(animal => {
+            if (animalCounts[animal.animalType]) {
+                animalCounts[animal.animalType]++;
+            } else {
+                animalCounts[animal.animalType] = 1;
+            }
+        });
+
+        // Convert animalCounts object to array of objects
+        const animalsArray = Object.entries(animalCounts).map(([animal, value]) => ({ animal, value }));
+
+        res.status(200).json(animalsArray);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

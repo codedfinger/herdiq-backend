@@ -34,7 +34,7 @@ const AnimalSchema = new mongoose.Schema({
     },
     purchaseType: {
         type: String,
-        required: true
+        required: false
     }, 
     shed: {
         type: String,

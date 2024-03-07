@@ -37,7 +37,16 @@ exports.register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create a new user with the hashed password
-        const newUser = new User({ email, password: hashedPassword, username, role: "basic", fullname });
+        const newUser = new User({ 
+            email, 
+            password: hashedPassword, 
+            username, 
+            role: "basic", 
+            fullname,
+            country: null,
+            city: null,
+            mobileNumber: null 
+        });
 
         // Save the new user to the database
         const savedUser = await newUser.save();
@@ -211,3 +220,126 @@ async function sendVerificationEmail(user, req, res){
         res.status(500).json({message: error.message})
     }
 }
+
+// @route GET api/user/{id}
+// @desc Returns a specific user
+// @access Public
+exports.show = async function (req, res) {
+    try {
+        const id = req.params.id;
+
+        const user = await User.findById(id);
+
+        if (!user) return res.status(401).json({message: 'User does not exist'});
+
+        res.status(200).json({user});
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+};
+
+// @route PUT api/user/{id}
+// @desc Update user details
+// @access Public
+exports.update = async function (req, res) {
+    try {
+        const updates = req.body.update;
+        const id = req.params.id;
+
+        const user = await User.findByIdAndUpdate(id, {$set: updates}, {new: true});
+
+        //if there is no image, return success message
+        if (!req.file) return res.status(200).json({
+            success: true,
+            status: 200,
+            data: {
+                user: user,  
+                message: 'User details updated'
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            status: 500,
+            error: {
+                message: 'user details could not be updated'
+            }
+        });
+    }
+};
+
+
+// @route PUT api/auth/change-password
+// @desc Change user password
+// @access Private (Requires authentication)
+
+exports.changePassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        const userId = req.user.id; // Assuming you have a middleware to extract user id from the request
+
+        // Fetch the user from the database
+        const user = await User.findById(userId);
+
+        // Check if the user exists
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                status: 404,
+                error: {
+                    message: 'User not found.'
+                }
+            });
+        }
+
+        // Check if the old password provided matches the current password
+        const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        console.log('isPasswordValid:', isPasswordValid); // Log the value
+
+        
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                status: 401,
+                error: {
+                    message: 'Incorrect old password.'
+                }
+            });
+        }
+
+        // Validate and hash the new password
+        if (!newPassword || newPassword.length < 8) {
+            return res.status(400).json({
+                success: false,
+                status: 400,
+                error: {
+                    message: 'New password should be at least 8 characters long.'
+                }
+            });
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update user's password with the new hashed password
+        user.password = hashedNewPassword;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            status: 200,
+            data: {
+                message: 'Password changed successfully.'
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            status: 500,
+            error: {
+                message: 'Internal server error',
+                reference_code: 'ERR-500-INTERNAL'
+            }
+        });
+    }
+};

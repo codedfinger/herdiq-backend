@@ -5,6 +5,8 @@ const animal = require('./animal');
 const shed = require('./shed');
 const vaccine = require('./vaccine')
 const progeny = require('./progeny')
+const breeding = require('./breeding')
+const milk = require('./milk')
 
 const authenticate = require('../middlewares/authenticate');
 
@@ -20,6 +22,8 @@ module.exports = app => {
     app.use('/api/shed', shed);
     app.use('/api/vaccine', vaccine);
     app.use('/api/progeny', progeny);
+    app.use('/api/breeding', breeding);
+    app.use('/api/milk', milk);
 
 
 

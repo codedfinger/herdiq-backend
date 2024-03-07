@@ -21,6 +21,13 @@ router.get('/get-breeds/', authenticateMiddleware, Breed.getAllBreeds);
 
 router.get('/get-goat-breeds/:id', authenticateMiddleware, Breed.getGoatBreeds);
 
+router.get('/get-cow-breeds/:id', authenticateMiddleware, Breed.getCowBreeds);
+
+router.get('/get-sheep-breeds/:id', authenticateMiddleware, Breed.getSheepBreeds);
+
+router.get('/get-pig-breeds/:id', authenticateMiddleware, Breed.getPigBreeds);
+
+router.get('/get-rabbit-breeds/:id', authenticateMiddleware, Breed.getRabbitBreeds);
 
 router.patch('/edit-breed/:id', authenticateMiddleware, Breed.updateBreed);
 

@@ -21,7 +21,6 @@ router.get('/get-shed/', authenticateMiddleware, Shed.getAllSheds);
 
 router.get('/get-goat-sheds/:id', authenticateMiddleware, Shed.getGoatSheds);
 
-
 router.patch('/edit-shed/:id', authenticateMiddleware, Shed.updateShed);
 
 router.delete('/delete-shed/:id', authenticateMiddleware, Shed.deleteShed);

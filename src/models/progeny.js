@@ -35,10 +35,6 @@ const ProgenySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    purchaseType: {
-        type: String,
-        required: true
-    }, 
     shed: {
         type: String,
     },
